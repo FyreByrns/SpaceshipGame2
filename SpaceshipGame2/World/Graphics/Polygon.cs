@@ -1,9 +1,10 @@
 ﻿using PixelEngine;
+using SpaceshipGame2.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using vf = SpaceshipGame2.Vector2;
+using vf = SpaceshipGame2.Utility.Vector2;
 
 namespace SpaceshipGame2.World.Graphics {
 	class Polygon : WorldObject {

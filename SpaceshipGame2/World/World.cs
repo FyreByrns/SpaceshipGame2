@@ -1,9 +1,12 @@
 ﻿using PixelEngine;
+using SpaceshipGame2.Utility;
+using SpaceshipGame2.World.Entities;
+using SpaceshipGame2.World.Graphics;
 using System.Collections.Generic;
 using System.Linq;
 
-using vf = SpaceshipGame2.Vector2;
-using vi = SpaceshipGame2.Vector2i;
+using vf = SpaceshipGame2.Utility.Vector2;
+using vi = SpaceshipGame2.Utility.Vector2i;
 
 namespace SpaceshipGame2.World {
 	class World : IUpdateable {

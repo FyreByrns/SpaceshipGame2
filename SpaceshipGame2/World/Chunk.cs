@@ -1,8 +1,9 @@
 ﻿using PixelEngine;
+using SpaceshipGame2.Utility;
 using System.Collections.Generic;
 
-using vf = SpaceshipGame2.Vector2;
-using vi = SpaceshipGame2.Vector2i;
+using vf = SpaceshipGame2.Utility.Vector2;
+using vi = SpaceshipGame2.Utility.Vector2i;
 
 namespace SpaceshipGame2.World {
 	class Chunk {

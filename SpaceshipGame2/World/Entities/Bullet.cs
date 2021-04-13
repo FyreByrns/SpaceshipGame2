@@ -1,6 +1,6 @@
 ﻿using PixelEngine;
 
-using vf = SpaceshipGame2.Vector2;
+using vf = SpaceshipGame2.Utility.Vector2;
 
 namespace SpaceshipGame2.World.Entities {
 	class Bullet : Entity {

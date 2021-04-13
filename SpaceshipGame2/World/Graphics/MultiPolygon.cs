@@ -1,8 +1,9 @@
 ﻿using PixelEngine;
+using SpaceshipGame2.Utility;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-using vf = SpaceshipGame2.Vector2;
+using vf = SpaceshipGame2.Utility.Vector2;
 
 namespace SpaceshipGame2.World.Graphics {
 	class MultiPolygon : Polygon {

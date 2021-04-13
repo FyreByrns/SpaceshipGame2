@@ -1,6 +1,8 @@
 ﻿using PixelEngine;
+using SpaceshipGame2.Utility;
+using SpaceshipGame2.World.Graphics;
 
-using vf = SpaceshipGame2.Vector2;
+using vf = SpaceshipGame2.Utility.Vector2;
 
 namespace SpaceshipGame2.World.Entities {
 	class Entity : WorldObject, IUpdateable {
