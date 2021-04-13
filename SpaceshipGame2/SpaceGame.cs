@@ -1,7 +1,7 @@
 ﻿using PixelEngine;
 using System.Runtime.InteropServices;
 
-namespace SpaceshipGame2 {
+namespace SpaceshipGame2.World {
 	class SpaceGame : Game {
 		public World world;
 
