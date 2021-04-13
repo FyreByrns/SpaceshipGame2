@@ -7,10 +7,12 @@ using vi = SpaceshipGame2.Vector2i;
 namespace SpaceshipGame2 {
 	class Chunk {
 		#region static
-		public static int chunkSize = 400;
+		public static int chunkSize = 10000;
 
 		public static vf ChunkOrigin_w(vi chunkPos_c) => chunkPos_c * chunkSize;
 		public static vi ChunkFromWorldPosition_c(vf position_w) => (System.Math.Floor(position_w.x / chunkSize), System.Math.Floor(position_w.y / chunkSize));
+
+		static JavidRng chunkRng = new JavidRng();
 		#endregion static
 
 		#region instance
@@ -20,7 +22,7 @@ namespace SpaceshipGame2 {
 
 		class ChunkLocalStar : WorldObject {
 			public override void Draw(Game target, World world) {
-				int radius_s = (int)world.ScreenLength(1);
+				//int radius_s = (int)world.ScreenLength(1);
 				vf position_s = world.ScreenPoint(position_w);
 				//target.FillCircle(position_s, radius_s, Pixel.Presets.White);
 				target.Draw(position_s, Pixel.Presets.White);
@@ -30,7 +32,7 @@ namespace SpaceshipGame2 {
 				return new AABB(position_w - 0.5f, position_w + 0.5f);
 			}
 
-			public ChunkLocalStar(vf position_w):base() {
+			public ChunkLocalStar(vf position_w) : base() {
 				this.position_w = position_w;
 				this.shouldBeSaved = false;
 			}
@@ -41,10 +43,10 @@ namespace SpaceshipGame2 {
 			this.chunkPosition_c = chunkPosition_c;
 			this.worldObjects = new List<WorldObject>(worldObjects);
 
-			JavidRng r = new JavidRng((uint)(30 + chunkPosition_c.x * 65536 + chunkPosition_c.y));
-			r.Next();
-			for (int i = 0; i < 3; i++)
-				this.worldObjects.Add(new ChunkLocalStar(ChunkOrigin_w(chunkPosition_c) + (r.Next(0, chunkSize), r.Next(0, chunkSize))) { chunk = this });
+			chunkRng.Seed((uint)(30 + chunkPosition_c.x * 65536 + chunkPosition_c.y));
+			chunkRng.Next();
+			for (int i = 0; i < 1000; i++)
+				this.worldObjects.Add(new ChunkLocalStar(ChunkOrigin_w(chunkPosition_c) + (chunkRng.Next(0, chunkSize), chunkRng.Next(0, chunkSize))) { chunk = this });
 		}
 		#endregion instance
 	}

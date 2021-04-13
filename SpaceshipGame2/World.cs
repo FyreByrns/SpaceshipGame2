@@ -56,13 +56,17 @@ namespace SpaceshipGame2 {
 		/// Create chunk if it does not exist, or [TODO] load chunk data from disk
 		/// </summary>
 		/// <param name="chunkPos_c">chunk coordinates to load</param>
-		public void CreateOrLoadChunk(vi chunkPos_c) {
+		public Chunk CreateOrLoadChunk(vi chunkPos_c) {
+			if (chunks.ContainsKey(chunkPos_c)) return chunks[chunkPos_c];
+
 			bool chunkExistsOnDisk = false; // [TODO] implement loading from disk
 			if (chunkExistsOnDisk) {
 				// [TODO] load
+				return null;
 			} else {
 				// create new chunk
 				chunks[chunkPos_c] = new Chunk(this, chunkPos_c);
+				return chunks[chunkPos_c];
 			}
 		}
 
@@ -74,6 +78,14 @@ namespace SpaceshipGame2 {
 		}
 
 		/// <summary>
+		/// Clears all world objects in a chunk from the object list
+		/// </summary>
+		void ClearInhabitantsFromObjectList(Chunk chunk) {
+			foreach (WorldObject worldObject in chunk.worldObjects.ToArray())
+				RemoveObject(worldObject);
+		}
+
+		/// <summary>
 		/// Unloads a chunk, [TODO] if it contains objects, saves the chunk to disk.
 		/// </summary>
 		public void UnloadChunk(Chunk chunk) {
@@ -82,6 +94,7 @@ namespace SpaceshipGame2 {
 			// if it survived above line of code, it has data
 			if (chunks.ContainsKey(chunk.chunkPosition_c)) {
 				SaveChunk(chunk); // save
+				ClearInhabitantsFromObjectList(chunk);
 				chunks.Remove(chunk.chunkPosition_c); // now delete
 			}
 		}
@@ -124,7 +137,7 @@ namespace SpaceshipGame2 {
 			vf cameraBottomRight_w = cameraTopLeft_w + (WorldLength(cameraSize_s.x), WorldLength(cameraSize_s.y));
 			AABB cameraRegion_w = new AABB(cameraTopLeft_w, cameraBottomRight_w);
 
-			return GetChunksInRegion(cameraRegion_w);
+			return GetChunksInRegion(cameraRegion_w, 0);
 		}
 
 		/// <summary>
@@ -172,9 +185,11 @@ namespace SpaceshipGame2 {
 
 			IEnumerable<WorldObject> currentlyVisibleWorldObjects = GetObjects(GetVisibleChunks());
 
-			IEnumerable<WorldObject> currentlyVisibleEntities = currentlyVisibleWorldObjects.Where(x => x is Entity);
-			foreach (Entity e in currentlyVisibleEntities)
-				e.Update(target, elapsed);
+			// update all entities
+			foreach (WorldObject wo in allObjects) {
+				if (wo is Entity e)
+					e.Update(target, elapsed);
+			}
 
 			// delete all objects registered for deletion
 			foreach (WorldObject worldObjectForDeletion in deletionRegister)
@@ -188,9 +203,10 @@ namespace SpaceshipGame2 {
 					misplacedWorldObjects.Add(worldObject);
 				}
 			}
-			foreach(WorldObject misplacedWorldObject in misplacedWorldObjects) {
-				RemoveObject(misplacedWorldObject);
-				AddObject(misplacedWorldObject);
+			foreach (WorldObject misplacedWorldObject in misplacedWorldObjects) {
+				misplacedWorldObject.chunk.worldObjects.Remove(misplacedWorldObject);
+				misplacedWorldObject.chunk = CreateOrLoadChunk(Chunk.ChunkFromWorldPosition_c(misplacedWorldObject.position_w));
+				chunks[Chunk.ChunkFromWorldPosition_c(misplacedWorldObject.position_w)].worldObjects.Add(misplacedWorldObject);
 			}
 
 			RemoveAllEmptyChunks();
@@ -199,20 +215,12 @@ namespace SpaceshipGame2 {
 		public void Draw(Game target) {
 			if (cameraClear) target.Clear(cameraClearColour);
 
-			//foreach (Chunk chunk in GetVisibleChunks())
-			//	target.Draw(ScreenPoint(Chunk.ChunkOrigin_w(chunk.chunkPosition_c)), Pixel.Presets.Red);
 			IEnumerable<WorldObject> currentlyVisibleWorldObjects = GetObjects(GetVisibleChunks());
+			target.DrawText(new Point(10, 20), $"{currentlyVisibleWorldObjects.Contains(player)}", Pixel.Presets.Cyan);
 
 			foreach (WorldObject worldObject in currentlyVisibleWorldObjects) {
 				worldObject.Draw(target, this);
-
-				if (worldObject.shouldBeSaved) {
-					vf chunkPos_w = Chunk.ChunkOrigin_w(worldObject.chunk.chunkPosition_c);
-					target.DrawCircle(ScreenPoint(chunkPos_w), 4, Pixel.Presets.Beige);
-				}
 			}
-
-			target.DrawText(new Point(10, 10), chunks.Count.ToString(), Pixel.Presets.Grey);
 		}
 
 		#region methods camera
