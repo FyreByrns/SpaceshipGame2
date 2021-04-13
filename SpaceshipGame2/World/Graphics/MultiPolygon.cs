@@ -140,9 +140,11 @@ namespace SpaceshipGame2.World.Graphics {
 				if (state.IsComplete()) {
 					polygon.shapes[state.name] = new Polygon(state.vertices.ToArray()) { colourOutline = state.colour, scale = state.scale };
 
-					foreach (vf v in state.vertices) {
-						System.Console.WriteLine($"{v.x},{v.y}");
-					}
+					//foreach (vf v in state.vertices) {
+					//	try {
+					//		System.Console.WriteLine($"{v.x},{v.y}");
+					//	} catch { }
+					//}
 				}
 			}
 
