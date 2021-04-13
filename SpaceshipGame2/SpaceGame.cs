@@ -8,7 +8,6 @@ namespace SpaceshipGame2 {
 
 		public override void OnCreate() {
 			base.OnCreate();
-
 		}
 
 		public override void OnUpdate(float elapsed) {
@@ -19,7 +18,7 @@ namespace SpaceshipGame2 {
 
 		public SpaceGame() {
 			Construct(200, 200, 4, 4);
-			currentScene = new GameScene(this);
+			currentScene = new MenuScene(this);
 
 			FreeConsole();
 			Start();

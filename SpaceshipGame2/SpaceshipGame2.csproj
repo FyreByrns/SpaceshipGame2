@@ -186,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Scenes\GameScene.cs" />
+    <Compile Include="Scenes\MenuScene.cs" />
     <Compile Include="Scenes\Scene.cs" />
     <Compile Include="Utility\AABB.cs" />
     <Compile Include="World\Entities\Bullet.cs" />
