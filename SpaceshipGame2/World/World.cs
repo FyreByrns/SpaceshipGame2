@@ -5,7 +5,7 @@ using System.Linq;
 using vf = SpaceshipGame2.Vector2;
 using vi = SpaceshipGame2.Vector2i;
 
-namespace SpaceshipGame2 {
+namespace SpaceshipGame2.World {
 	class World : IUpdateable {
 		#region vars camera
 		public vf cameraPosition_w = (0, 0);

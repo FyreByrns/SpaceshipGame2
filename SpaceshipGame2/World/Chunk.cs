@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using vf = SpaceshipGame2.Vector2;
 using vi = SpaceshipGame2.Vector2i;
 
-namespace SpaceshipGame2 {
+namespace SpaceshipGame2.World {
 	class Chunk {
 		#region static
 		public static int chunkSize = 10000;

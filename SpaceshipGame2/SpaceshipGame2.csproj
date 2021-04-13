@@ -189,7 +189,7 @@
     <Compile Include="World\Entities\Bullet.cs" />
     <Compile Include="World\Chunk.cs" />
     <Compile Include="World\Entities\Entity.cs" />
-    <Compile Include="World\IUpdateable.cs" />
+    <Compile Include="Utility\IUpdateable.cs" />
     <Compile Include="Utility\JavidRng.cs" />
     <Compile Include="Utility\Vector2i.cs" />
     <Compile Include="World\World.cs" />

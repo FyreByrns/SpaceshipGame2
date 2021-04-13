@@ -1,7 +1,7 @@
 ﻿
 using vf = SpaceshipGame2.Vector2;
 
-namespace SpaceshipGame2 {
+namespace SpaceshipGame2.Utility {
 	class AABB {
 		public vf topLeft, bottomRight;
 		public float width => bottomRight.x - topLeft.x;

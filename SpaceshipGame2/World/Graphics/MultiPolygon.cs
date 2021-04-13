@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 using vf = SpaceshipGame2.Vector2;
 
-namespace SpaceshipGame2 {
+namespace SpaceshipGame2.World.Graphics {
 	class MultiPolygon : Polygon {
 		public Dictionary<string, Polygon> shapes;
 

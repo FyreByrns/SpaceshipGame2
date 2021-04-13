@@ -1,4 +1,4 @@
-﻿namespace SpaceshipGame2 {
+﻿namespace SpaceshipGame2.Utility {
 	public struct Vector2i {
 		public int x, y;
 

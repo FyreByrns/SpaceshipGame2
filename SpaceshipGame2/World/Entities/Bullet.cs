@@ -2,7 +2,7 @@
 
 using vf = SpaceshipGame2.Vector2;
 
-namespace SpaceshipGame2 {
+namespace SpaceshipGame2.World.Entities {
 	class Bullet : Entity {
 		float lifetime = 3;
 		bool wantToDie = false;

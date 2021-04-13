@@ -2,7 +2,7 @@
 
 using vf = SpaceshipGame2.Vector2;
 
-namespace SpaceshipGame2 {
+namespace SpaceshipGame2.World {
 	abstract class WorldObject {
 		public vf position_w;
 		public Chunk chunk;

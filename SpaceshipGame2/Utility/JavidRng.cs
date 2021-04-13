@@ -4,7 +4,7 @@
 // (original from https://lemire.me/blog/2019/03/19/the-fastest-conventional-random-number-generator-that-can-pass-big-crush/)
 // Ported to C# and probably made much worse.
 
-namespace SpaceshipGame2 {
+namespace SpaceshipGame2.Utility {
 	class JavidRng {
 		uint state;
 

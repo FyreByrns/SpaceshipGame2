@@ -5,7 +5,7 @@ using System.Linq;
 
 using vf = SpaceshipGame2.Vector2;
 
-namespace SpaceshipGame2 {
+namespace SpaceshipGame2.World.Graphics {
 	class Polygon : WorldObject {
 		public vf[] vertices;
 
