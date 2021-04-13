@@ -19,7 +19,7 @@ namespace SpaceshipGame2 {
 
 		#region chunking / world objects
 		public Dictionary<vi, Chunk> chunks;
-		public List<WorldObject> allObjects; // in case an object gets lost, it's stored here
+		public List<WorldObject> allObjects;
 
 		/// <summary>
 		/// Add an object to the world
@@ -28,7 +28,7 @@ namespace SpaceshipGame2 {
 			allObjects.Add(worldObject);
 
 			vi chunkPos_c = Chunk.ChunkFromWorldPosition_c(worldObject.position_w);
-			CreateOrLoadChunk(chunkPos_c);
+			ExistingOrNewChunk(chunkPos_c);
 			chunks[chunkPos_c].worldObjects.Add(worldObject);
 			worldObject.chunk = chunks[chunkPos_c];
 		}
@@ -56,7 +56,7 @@ namespace SpaceshipGame2 {
 		/// Create chunk if it does not exist, or [TODO] load chunk data from disk
 		/// </summary>
 		/// <param name="chunkPos_c">chunk coordinates to load</param>
-		public Chunk CreateOrLoadChunk(vi chunkPos_c) {
+		public Chunk ExistingOrNewChunk(vi chunkPos_c) {
 			if (chunks.ContainsKey(chunkPos_c)) return chunks[chunkPos_c];
 
 			bool chunkExistsOnDisk = false; // [TODO] implement loading from disk
@@ -109,6 +109,9 @@ namespace SpaceshipGame2 {
 				chunks.Remove(chunk.chunkPosition_c);
 		}
 
+		/// <summary>
+		/// Loop over all chunks and delete those with no relevant information in them
+		/// </summary>
 		void RemoveAllEmptyChunks() {
 			List<vi> removals = new List<vi>();
 
@@ -205,7 +208,7 @@ namespace SpaceshipGame2 {
 			}
 			foreach (WorldObject misplacedWorldObject in misplacedWorldObjects) {
 				misplacedWorldObject.chunk.worldObjects.Remove(misplacedWorldObject);
-				misplacedWorldObject.chunk = CreateOrLoadChunk(Chunk.ChunkFromWorldPosition_c(misplacedWorldObject.position_w));
+				misplacedWorldObject.chunk = ExistingOrNewChunk(Chunk.ChunkFromWorldPosition_c(misplacedWorldObject.position_w));
 				chunks[Chunk.ChunkFromWorldPosition_c(misplacedWorldObject.position_w)].worldObjects.Add(misplacedWorldObject);
 			}
 
