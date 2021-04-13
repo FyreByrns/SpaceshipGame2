@@ -185,22 +185,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AABB.cs" />
-    <Compile Include="Bullet.cs" />
-    <Compile Include="Chunk.cs" />
-    <Compile Include="Entity.cs" />
-    <Compile Include="IUpdateable.cs" />
-    <Compile Include="JavidRng.cs" />
-    <Compile Include="Vector2i.cs" />
-    <Compile Include="World.cs" />
-    <Compile Include="MultiPolygon.cs" />
-    <Compile Include="WorldObject.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="Polygon.cs" />
+    <Compile Include="Utility\AABB.cs" />
+    <Compile Include="World\Entities\Bullet.cs" />
+    <Compile Include="World\Chunk.cs" />
+    <Compile Include="World\Entities\Entity.cs" />
+    <Compile Include="World\IUpdateable.cs" />
+    <Compile Include="Utility\JavidRng.cs" />
+    <Compile Include="Utility\Vector2i.cs" />
+    <Compile Include="World\World.cs" />
+    <Compile Include="World\Graphics\MultiPolygon.cs" />
+    <Compile Include="World\WorldObject.cs" />
+    <Compile Include="Utility\Extensions.cs" />
+    <Compile Include="World\Graphics\Polygon.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpaceGame.cs" />
-    <Compile Include="Vector2.cs" />
+    <Compile Include="Utility\Vector2.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
