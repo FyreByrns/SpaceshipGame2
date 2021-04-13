@@ -1,5 +1,6 @@
 ﻿using PixelEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 using vf = SpaceshipGame2.Vector2;
 using vi = SpaceshipGame2.Vector2i;
@@ -16,75 +17,202 @@ namespace SpaceshipGame2 {
 		vf cameraPanStart;
 		#endregion vars camera
 
-		public List<Entity> entities;
-		public List<Entity> deadEntities;
-		List<vf> stars_w = new List<vf>();
+		#region chunking / world objects
+		public Dictionary<vi, Chunk> chunks;
+		public List<WorldObject> allObjects; // in case an object gets lost, it's stored here
 
-		float shootTimer = 0;
+		/// <summary>
+		/// Add an object to the world
+		/// </summary>
+		public void AddObject(WorldObject worldObject) {
+			allObjects.Add(worldObject);
+
+			vi chunkPos_c = Chunk.ChunkFromWorldPosition_c(worldObject.position_w);
+			CreateOrLoadChunk(chunkPos_c);
+			chunks[chunkPos_c].worldObjects.Add(worldObject);
+			worldObject.chunk = chunks[chunkPos_c];
+		}
+
+		/// <summary>
+		/// Remove an object from the world
+		/// </summary>
+		public void RemoveObject(WorldObject worldObject) {
+			if (worldObject.chunk != null) {
+				allObjects.Remove(worldObject);
+				worldObject.chunk.worldObjects.Remove(worldObject);
+				RemoveChunkIfEmpty(worldObject.chunk);
+			}
+		}
+
+		List<WorldObject> deletionRegister = new List<WorldObject>();
+		/// <summary>
+		/// Register a world object for deletion after updating for this frame is done
+		/// </summary>
+		public void RegisterForDeletion(WorldObject worldObject) {
+			deletionRegister.Add(worldObject);
+		}
+
+		/// <summary>
+		/// Create chunk if it does not exist, or [TODO] load chunk data from disk
+		/// </summary>
+		/// <param name="chunkPos_c">chunk coordinates to load</param>
+		public void CreateOrLoadChunk(vi chunkPos_c) {
+			bool chunkExistsOnDisk = false; // [TODO] implement loading from disk
+			if (chunkExistsOnDisk) {
+				// [TODO] load
+			} else {
+				// create new chunk
+				chunks[chunkPos_c] = new Chunk(this, chunkPos_c);
+			}
+		}
+
+		/// <summary>
+		/// [TODO] Save all chunk data to disk
+		/// </summary>
+		public void SaveChunk(Chunk chunk) {
+
+		}
+
+		/// <summary>
+		/// Unloads a chunk, [TODO] if it contains objects, saves the chunk to disk.
+		/// </summary>
+		public void UnloadChunk(Chunk chunk) {
+			RemoveChunkIfEmpty(chunk);
+
+			// if it survived above line of code, it has data
+			if (chunks.ContainsKey(chunk.chunkPosition_c)) {
+				SaveChunk(chunk); // save
+				chunks.Remove(chunk.chunkPosition_c); // now delete
+			}
+		}
+
+		/// <summary>
+		/// Remove a chunk if it has no objects in it
+		/// </summary>
+		/// <param name="chunk">chunk to check</param>
+		/// <returns></returns>
+		public void RemoveChunkIfEmpty(Chunk chunk) {
+			if (chunk.worldObjects.Count == 0)
+				chunks.Remove(chunk.chunkPosition_c);
+		}
+
+		void RemoveAllEmptyChunks() {
+			List<vi> removals = new List<vi>();
+
+			foreach (Chunk chunk in chunks.Values)
+				if (chunk.worldObjects.Where(x => x.shouldBeSaved == true).Count() == 0)
+					removals.Add(chunk.chunkPosition_c);
+
+			foreach (vi chunkPos_c in removals)
+				chunks.Remove(chunkPos_c);
+		}
+
+		/// <summary>
+		/// Get all world objects in a collection of chunks
+		/// </summary>
+		IEnumerable<WorldObject> GetObjects(IEnumerable<Chunk> chunks) {
+			foreach (Chunk chunk in chunks)
+				foreach (WorldObject o in chunk.worldObjects)
+					yield return o;
+		}
+
+		/// <summary>
+		/// Get all chunks the camera can see
+		/// </summary>
+		IEnumerable<Chunk> GetVisibleChunks() {
+			vf cameraTopLeft_w = cameraPosition_w;
+			vf cameraBottomRight_w = cameraTopLeft_w + (WorldLength(cameraSize_s.x), WorldLength(cameraSize_s.y));
+			AABB cameraRegion_w = new AABB(cameraTopLeft_w, cameraBottomRight_w);
+
+			return GetChunksInRegion(cameraRegion_w);
+		}
+
+		/// <summary>
+		/// Get all chunks in a world AABB
+		/// </summary>
+		/// <param name="region_w">region in world space</param>
+		/// <param name="border">extra chunks around the resultant chunks to also return</param>
+		/// <returns></returns>
+		IEnumerable<Chunk> GetChunksInRegion(AABB region_w, int border = 1) {
+			vi topLeft_c = Chunk.ChunkFromWorldPosition_c(region_w.topLeft);
+			vi bottomRight_c = Chunk.ChunkFromWorldPosition_c(region_w.bottomRight);
+
+			for (int x_c = topLeft_c.x - border; x_c <= bottomRight_c.x + border; x_c++) {
+				for (int y_c = topLeft_c.y - border; y_c <= bottomRight_c.y + border; y_c++) {
+					if (!chunks.ContainsKey((x_c, y_c))) chunks[(x_c, y_c)] = new Chunk(this, (x_c, y_c));
+					if (chunks.ContainsKey((x_c, y_c))) yield return chunks[(x_c, y_c)];
+				}
+			}
+		}
+		#endregion chunking / world objects
+
+		#region special entities
+		Entity player;
+		#endregion special entities
+
+		float shootTimer;
 		public void Update(Game target, float elapsed) {
-			if (entities.Count == 0)
-				entities.Add(new Entity((0, 0)));
-
-			if (target.GetKey(Key.Up).Down) entities[0].ApplyForceAtAngle(1, entities[0].rotation);
-			if (target.GetKey(Key.Down).Down) entities[0].ApplyForceAtAngle(-1, entities[0].rotation);
-			if (target.GetKey(Key.Left).Down) entities[0].ApplyRotationalForce(-0.1f);
-			if (target.GetKey(Key.Right).Down) entities[0].ApplyRotationalForce(0.1f);
+			if (target.GetKey(Key.Up).Down) player.ApplyForceAtAngle(1, player.rotation);
+			if (target.GetKey(Key.Down).Down) player.ApplyForceAtAngle(-1, player.rotation);
+			if (target.GetKey(Key.Left).Down) player.ApplyRotationalForce(-0.1f);
+			if (target.GetKey(Key.Right).Down) player.ApplyRotationalForce(0.1f);
 
 			shootTimer -= elapsed;
 			if (target.GetKey(Key.Space).Down && shootTimer <= 0) {
-				entities.Add(new Bullet(vf.Along(entities[0].position_w, 20, -entities[0].rotation + (float)System.Math.PI / 2)));
-				entities[entities.Count - 1].rotation = entities[0].rotation;
-				entities[entities.Count - 1].vel = entities[0].vel + vf.Along(default, 1, -entities[0].rotation + (float)System.Math.PI / 2);
-				entities[entities.Count - 1].graphics = MultiPolygon.FromString("[name(bullet)v(-0.2,-0.5)v(0.2,-0.5)v(0.2,0.5)v(-0.2,0.5)colour(0,255,0)scale(10)]");
+				Entity bullet = new Bullet(vf.Along(player.position_w, 20, -player.rotation + (float)System.Math.PI / 2));
+				AddObject(bullet);
+				bullet.rotation = player.rotation;
+				bullet.vel = player.vel + vf.Along(default, 1, -player.rotation + (float)System.Math.PI / 2);
+				bullet.graphics = MultiPolygon.FromString("[name(bullet)v(-0.2,-0.5)v(0.2,-0.5)v(0.2,0.5)v(-0.2,0.5)colour(0,255,0)scale(10)]");
 				shootTimer = 0.1f;
 			}
 
-			CameraCenterOnEntity(entities[0]);
+			CameraCenterOnEntity(player);
 			CameraZoomBy(1 + (float)target.MouseScroll / 10, cameraSize_s / 2);
 
-			foreach (Entity e in entities)
+			IEnumerable<WorldObject> currentlyVisibleWorldObjects = GetObjects(GetVisibleChunks());
+
+			IEnumerable<WorldObject> currentlyVisibleEntities = currentlyVisibleWorldObjects.Where(x => x is Entity);
+			foreach (Entity e in currentlyVisibleEntities)
 				e.Update(target, elapsed);
+
+			// delete all objects registered for deletion
+			foreach (WorldObject worldObjectForDeletion in deletionRegister)
+				RemoveObject(worldObjectForDeletion);
+
+			// make sure all world objects are in the correct chunk
+			List<WorldObject> misplacedWorldObjects = new List<WorldObject>();
+			foreach (WorldObject worldObject in allObjects) {
+				vi chunkPos_c = Chunk.ChunkOrigin_w(worldObject.position_w);
+				if (chunkPos_c != worldObject.chunk.chunkPosition_c) {
+					misplacedWorldObjects.Add(worldObject);
+				}
+			}
+			foreach(WorldObject misplacedWorldObject in misplacedWorldObjects) {
+				RemoveObject(misplacedWorldObject);
+				AddObject(misplacedWorldObject);
+			}
+
+			RemoveAllEmptyChunks();
 		}
 
 		public void Draw(Game target) {
 			if (cameraClear) target.Clear(cameraClearColour);
 
-			AABB screenBounds = new AABB(cameraPosition_w, cameraPosition_w + (WorldLength(cameraSize_s.x), WorldLength(cameraSize_s.y)));
-			int rendered = 0;
+			//foreach (Chunk chunk in GetVisibleChunks())
+			//	target.Draw(ScreenPoint(Chunk.ChunkOrigin_w(chunk.chunkPosition_c)), Pixel.Presets.Red);
+			IEnumerable<WorldObject> currentlyVisibleWorldObjects = GetObjects(GetVisibleChunks());
 
-			foreach (vf star_w in stars_w) {
-				if (screenBounds.ContainsPoint(star_w)) {
-					vf star_s = ScreenPoint(star_w);
-					target.Draw(star_s, Pixel.Presets.White);
-					rendered++;
+			foreach (WorldObject worldObject in currentlyVisibleWorldObjects) {
+				worldObject.Draw(target, this);
+
+				if (worldObject.shouldBeSaved) {
+					vf chunkPos_w = Chunk.ChunkOrigin_w(worldObject.chunk.chunkPosition_c);
+					target.DrawCircle(ScreenPoint(chunkPos_w), 4, Pixel.Presets.Beige);
 				}
 			}
 
-			foreach (WorldObject e in entities) {
-				AABB bnds = e.GetBounds();
-				bnds.topLeft = ScreenPoint(bnds.topLeft);
-				bnds.bottomRight = ScreenPoint(bnds.bottomRight);
-
-				//if (screenBounds.Overlaps(bnds)) {
-				e.Draw(target, this);
-				//}
-				rendered++;
-
-				if (cameraDrawDebug) {
-					target.DrawRect(ScreenPoint(e.GetBounds().topLeft), ScreenPoint(e.GetBounds().bottomRight), Pixel.Presets.Lavender);
-					string posString = $"{e.position_w.x.Truncate(2)},{e.position_w.y.Truncate(2)}";
-					target.DrawText(ScreenPoint(e.GetBounds().topLeft - (WorldLength(posString.Length * 4), WorldLength(8)) + (e.GetBounds().width / 2, 0)), posString, Pixel.Presets.Apricot);
-				}
-			}
-
-			if (cameraDrawDebug) {
-				target.DrawText(new Point(8, 8), $"{rendered}", Pixel.Presets.White);
-				target.DrawText(new Point(0, 0), $"{screenBounds.topLeft.x},{screenBounds.topLeft.y}", Pixel.Presets.DarkCyan);
-			}
-
-			foreach (Entity e in deadEntities)
-				entities.Remove(e);
-			deadEntities.Clear();
+			target.DrawText(new Point(10, 10), chunks.Count.ToString(), Pixel.Presets.Grey);
 		}
 
 		#region methods camera
@@ -129,45 +257,14 @@ namespace SpaceshipGame2 {
 		public World(vf position_w, vf size_s) {
 			cameraPosition_w = position_w;
 			cameraSize_s = size_s;
+			CameraCenterOn(default); // center camera on (0, 0)
 
-			entities = new List<Entity>();
-			deadEntities = new List<Entity>();
+			chunks = new Dictionary<vi, Chunk>();
+			allObjects = new List<WorldObject>();
 
-			System.Random r = new System.Random(30);
-			for (int i = 0; i < 10000; i++)
-				stars_w.Add((r.Next(-10000, 10000), r.Next(-10000, 10000)));
+			player = new Entity((0, 0));
+			AddObject(player);
 		}
-	}
-
-	class Chunk {
-		#region static
-		public static Dictionary<vi, Chunk> chunks = new Dictionary<vi, Chunk>();
-		public static int chunkSize = 200;
-
-		public static vf ChunkOrigin_w(vi chunkPos_c) => chunkPos_c * chunkSize;
-		public static vi ChunkFromWorldPosition(vf position_w) => position_w / chunkSize;
-
-		public static void UpdateInhabitedChunk(WorldObject worldObject) {
-			worldObject.chunk.objects.Remove(worldObject);
-
-			vi inhabitedChunk_c = ChunkFromWorldPosition(worldObject.position_w);
-			if (!chunks.ContainsKey(inhabitedChunk_c))
-				chunks[inhabitedChunk_c] = new Chunk(inhabitedChunk_c);
-
-			chunks[inhabitedChunk_c].objects.Add(worldObject);
-			worldObject.chunk = chunks[inhabitedChunk_c];
-		}
-		#endregion static
-
-		#region instance
-		public vi chunkPosition_c;
-		public List<WorldObject> objects;
-
-		public Chunk(vi chunkPosition_c, params WorldObject[] objects) {
-			this.chunkPosition_c = chunkPosition_c;
-			this.objects = new List<WorldObject>(objects);
-		}
-		#endregion instance
 	}
 }
 

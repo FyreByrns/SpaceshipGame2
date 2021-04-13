@@ -3,26 +3,25 @@
 using vf = SpaceshipGame2.Vector2;
 
 namespace SpaceshipGame2 {
-		class Bullet : Entity {
-			float lifetime = 3;
-			bool wantToDie = false;
+	class Bullet : Entity {
+		float lifetime = 3;
+		bool wantToDie = false;
 
-			public override void Update(Game target, float elapsed) {
-				base.Update(target, elapsed);
+		public override void Update(Game target, float elapsed) {
+			base.Update(target, elapsed);
 
-				lifetime -= elapsed;
-				if (lifetime < 0) wantToDie = true;
-			}
-
-			public override void Draw(Game target, World world) {
-				base.Draw(target, world);
-
-				if (wantToDie)
-					world.deadEntities.Add(this);
-			}
-
-			public Bullet(vf position_w) : base(position_w) {
-			}
+			lifetime -= elapsed;
+			if (lifetime < 0) wantToDie = true;
 		}
+
+		public override void Draw(Game target, World world) {
+			base.Draw(target, world);
+
+			if (wantToDie) chunk.world.RegisterForDeletion(this);
+		}
+
+		public Bullet(vf position_w) : base(position_w) {
+		}
+	}
 }
 
