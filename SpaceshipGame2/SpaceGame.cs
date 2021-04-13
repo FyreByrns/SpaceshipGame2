@@ -1,14 +1,14 @@
 ﻿using PixelEngine;
 using System.Runtime.InteropServices;
 
-namespace SpaceshipGame2.World {
+namespace SpaceshipGame2 {
 	class SpaceGame : Game {
-		public World world;
+		public World.World world;
 
 		public override void OnCreate() {
 			base.OnCreate();
 
-			world = new World((0, 0), (ScreenWidth, ScreenHeight));
+			world = new World.World((0, 0), (ScreenWidth, ScreenHeight));
 		}
 
 		public override void OnUpdate(float elapsed) {
