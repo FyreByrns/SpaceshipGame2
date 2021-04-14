@@ -18,7 +18,7 @@ namespace SpaceshipGame2.Utility {
 
 		public bool ContainsPoint(vf point) {
 			return topLeft.x <= point.x && topLeft.y <= point.y
-				&& bottomRight.x >= point.x && bottomRight.y >= point.y;
+				&& bottomRight.x > point.x && bottomRight.y > point.y;
 		}
 	}
 }
