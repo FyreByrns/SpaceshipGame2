@@ -20,7 +20,7 @@ namespace SpaceshipGame2 {
 			Construct(200, 200, 4, 4);
 			currentScene = new MenuScene(this);
 
-			FreeConsole();
+			//FreeConsole();
 			Start();
 		}
 
