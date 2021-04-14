@@ -5,6 +5,8 @@ namespace SpaceshipGame2.Scenes {
 		public World.World world;
 
 		public override void Update(float elapsed) {
+			if (owner.inputManager.ActionPressed("cancel"))
+				owner.currentScene = new MenuScene(owner);
 			world.Update(owner, elapsed);
 			world.Draw(owner);
 		}

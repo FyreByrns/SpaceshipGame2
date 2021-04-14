@@ -8,6 +8,7 @@ namespace SpaceshipGame2.Scenes {
 		UIManager uiManager;
 
 		public override void Update(float elapsed) {
+			owner.Clear(Pixel.Presets.Black);
 			uiManager.Update();
 			uiManager.Draw();
 		}
@@ -19,17 +20,26 @@ namespace SpaceshipGame2.Scenes {
 			playButton.OnMouseClicked += PlayClicked;
 			uiManager.uiElements.Add(playButton);
 
-			TextButton quitButton = new TextButton(playButton.bottomLeft + (0, 1), "quit");
+			TextButton settingsButton = new TextButton(playButton.bottomLeft + (0, 1), "settings");
+			settingsButton.OnMouseClicked += SettingsClicked;
+			uiManager.uiElements.Add(settingsButton);
+
+			TextButton quitButton = new TextButton(settingsButton.bottomLeft + (0, 1), "quit");
 			quitButton.OnMouseClicked += QuitClicked;
 			uiManager.uiElements.Add(quitButton);
 		}
 
-		private void PlayClicked(vf mouse, Mouse button) {
+		private void PlayClicked(UIElement sender, vf mouse, Mouse button) {
 			Scene playScene = new GameScene(owner);
 			owner.currentScene = playScene;
 		}
+		
+		private void SettingsClicked(UIElement sender, vf mouse, Mouse button) {
+			Scene settingsScene = new SettingsScene(owner);
+			owner.currentScene = settingsScene;
+		}
 
-		private void QuitClicked(vf mouse, Mouse button) {
+		private void QuitClicked(UIElement sender, vf mouse, Mouse button) {
 			owner.Finish();
 		}
 	}

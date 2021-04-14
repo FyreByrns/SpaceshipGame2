@@ -189,6 +189,7 @@
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Scenes\MenuScene.cs" />
     <Compile Include="Scenes\Scene.cs" />
+    <Compile Include="Scenes\SettingsScene.cs" />
     <Compile Include="UI\TextButton.cs" />
     <Compile Include="UI\UIColourCollection.cs" />
     <Compile Include="UI\UIElement.cs" />

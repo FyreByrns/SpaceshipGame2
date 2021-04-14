@@ -15,7 +15,7 @@ namespace SpaceshipGame2.UI {
 		}
 
 		#region events
-		public delegate void MouseEventHandler(vf mouse, Mouse button);
+		public delegate void MouseEventHandler(UIElement sender, vf mouse, Mouse button);
 		public event MouseEventHandler OnMouseHover;
 		public event MouseEventHandler OnMouseDown;
 		public event MouseEventHandler OnMouseHeld;
@@ -71,23 +71,23 @@ namespace SpaceshipGame2.UI {
 					if (target.GetMouse(check).Down) {
 						anyTrue = true;
 						if (!wasPressed[(int)check])
-							OnMouseDown?.Invoke(mouse, check);
+							OnMouseDown?.Invoke(this, mouse, check);
 						else
-							OnMouseHeld?.Invoke(mouse, check);
+							OnMouseHeld?.Invoke(this, mouse, check);
 
 						wasPressed[(int)check] = true;
 
 					} else {
 						if (wasPressed[(int)check]) {
-							OnMouseUp?.Invoke(mouse, check);
-							OnMouseClicked?.Invoke(mouse, check);
+							OnMouseUp?.Invoke(this, mouse, check);
+							OnMouseClicked?.Invoke(this, mouse, check);
 						}
 
 						wasPressed[(int)check] = false;
 					}
 				}
 				if (!anyTrue) // if none were pressed and the mouse is over the element, the element is hovered
-					OnMouseHover?.Invoke(mouse, Mouse.None);
+					OnMouseHover?.Invoke(this, mouse, Mouse.None);
 			}
 		}
 
@@ -111,13 +111,13 @@ namespace SpaceshipGame2.UI {
 			bounds = new AABB(position, position + size);
 		}
 
-		private void UIElement_OnMouseUp(vf mouse, Mouse button) {
+		private void UIElement_OnMouseUp(UIElement sender, vf mouse, Mouse button) {
 			state = UIElementState.Up;
 		}
-		private void UIElement_OnMouseDown(vf mouse, Mouse button) {
+		private void UIElement_OnMouseDown(UIElement sender, vf mouse, Mouse button) {
 			state = UIElementState.Down;
 		}
-		private void UIElement_OnMouseHover(vf mouse, Mouse button) {
+		private void UIElement_OnMouseHover(UIElement sender, vf mouse, Mouse button) {
 			state = UIElementState.Hovered;
 		}
 	}
