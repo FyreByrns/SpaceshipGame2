@@ -43,7 +43,7 @@ namespace SpaceshipGame2.Scenes {
 
 			TextButton lastButton = backButton;
 			foreach (string action in owner.inputManager.bindings.Keys) {
-				TextButton actionButton = new RebindButton(lastButton.bottomLeft + (0, 1), (200, 10), action);
+				TextButton actionButton = new RebindButton(lastButton.bottomLeft + (0, 1), (180, 10), action);
 				actionButton.OnMouseClicked += RebindClicked;
 				uiManager.uiElements.Add(actionButton);
 				lastButton = actionButton;
