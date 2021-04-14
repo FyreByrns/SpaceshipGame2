@@ -5,27 +5,21 @@ namespace SpaceshipGame2.Input {
 	class InputManager {
 		public SpaceGame owner;
 
-		Dictionary<string, List<Key>> bindings = new Dictionary<string, List<Key>>();
+		public Dictionary<string, Key> bindings = new Dictionary<string, Key>();
 
 		public void Bind(string action, Key key) {
-			if (!bindings.ContainsKey(action))
-				bindings[action] = new List<Key>();
-			bindings[action].Add(key);
+			bindings[action] = key;
 		}
 
-		public void Unbind(string action, Key key) {
-			if (bindings.ContainsKey(action)) {
-				if (key == Key.Any) 
-					bindings.Remove(action);
-				else if (bindings[action].Contains(key))
-					bindings[action].Remove(key);
-			}
+		public void Unbind(string action) {
+			if (bindings.ContainsKey(action))
+				bindings.Remove(action);
 		}
 
 		public bool ActionPressed(string action) {
 			if (bindings.ContainsKey(action)) {
-				foreach (Key key in bindings[action])
-					if (owner.GetKey(key).Down) return true;
+				if (owner.GetKey(bindings[action]).Down)
+					return true;
 			}
 			return false;
 		}
@@ -37,6 +31,8 @@ namespace SpaceshipGame2.Input {
 		public InputManager(SpaceGame owner) {
 			this.owner = owner;
 
+			Bind("cancel", Key.Escape);
+			Bind("confirm", Key.Enter);
 			Bind("up", Key.W);
 			Bind("down", Key.S);
 			Bind("left", Key.A);
