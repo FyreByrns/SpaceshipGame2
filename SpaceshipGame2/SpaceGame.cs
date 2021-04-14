@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 namespace SpaceshipGame2 {
 	class SpaceGame : Game {
 		public Scene currentScene;
+		public Input.InputManager inputManager;
 
 		public override void OnCreate() {
 			base.OnCreate();
@@ -13,11 +14,13 @@ namespace SpaceshipGame2 {
 		public override void OnUpdate(float elapsed) {
 			base.OnUpdate(elapsed);
 
+			inputManager.Update();
 			currentScene.Update(elapsed);
 		}
 
 		public SpaceGame() {
 			Construct(200, 200, 4, 4);
+			inputManager = new Input.InputManager(this);
 			currentScene = new MenuScene(this);
 
 			//FreeConsole();

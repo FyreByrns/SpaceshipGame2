@@ -32,7 +32,7 @@ namespace SpaceshipGame2.World.Entities {
 		public void ApplyRotationalForce(float magnitude) => rotationForces += magnitude;
 		#endregion motion
 
-		public virtual void Update(Game target, float elapsed) {
+		public virtual void Update(SpaceGame target, float elapsed) {
 			graphics.position_w = position_w;
 
 			// a = F / m

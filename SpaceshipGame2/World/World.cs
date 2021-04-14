@@ -170,11 +170,11 @@ namespace SpaceshipGame2.World {
 		#endregion special entities
 
 		float shootTimer;
-		public void Update(Game target, float elapsed) {
-			if (target.GetKey(Key.Up).Down) player.ApplyForceAtAngle(1, player.rotation);
-			if (target.GetKey(Key.Down).Down) player.ApplyForceAtAngle(-1, player.rotation);
-			if (target.GetKey(Key.Left).Down) player.ApplyRotationalForce(-0.1f);
-			if (target.GetKey(Key.Right).Down) player.ApplyRotationalForce(0.1f);
+		public void Update(SpaceGame target, float elapsed) {
+			if (target.inputManager.ActionPressed("up")) player.ApplyForceAtAngle(1, player.rotation);
+			if (target.inputManager.ActionPressed("down")) player.ApplyForceAtAngle(-1, player.rotation);
+			if (target.inputManager.ActionPressed("left")) player.ApplyRotationalForce(-0.1f);
+			if (target.inputManager.ActionPressed("right")) player.ApplyRotationalForce(0.1f);
 
 			shootTimer -= elapsed;
 			if (target.GetKey(Key.Space).Down && shootTimer <= 0) {

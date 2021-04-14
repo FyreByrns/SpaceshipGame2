@@ -185,6 +185,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Input\InputManager.cs" />
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Scenes\MenuScene.cs" />
     <Compile Include="Scenes\Scene.cs" />

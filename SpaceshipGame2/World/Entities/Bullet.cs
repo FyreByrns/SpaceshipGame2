@@ -7,7 +7,7 @@ namespace SpaceshipGame2.World.Entities {
 		float lifetime = 3;
 		bool wantToDie = false;
 
-		public override void Update(Game target, float elapsed) {
+		public override void Update(SpaceGame target, float elapsed) {
 			base.Update(target, elapsed);
 
 			lifetime -= elapsed;
