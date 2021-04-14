@@ -220,6 +220,10 @@
     <Compile Include="Scenes\MenuScene.cs" />
     <Compile Include="Scenes\Scene.cs" />
     <Compile Include="Scenes\SettingsScene.cs" />
+    <Compile Include="Sound\AudioPlaybackEngine.cs" />
+    <Compile Include="Sound\AutoDisposeFileReader.cs" />
+    <Compile Include="Sound\CachedSound.cs" />
+    <Compile Include="Sound\CachedSoundSampleProvider.cs" />
     <Compile Include="UI\TextButton.cs" />
     <Compile Include="UI\UIColourCollection.cs" />
     <Compile Include="UI\UIElement.cs" />
