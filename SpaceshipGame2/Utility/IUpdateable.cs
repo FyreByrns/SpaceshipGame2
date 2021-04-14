@@ -2,7 +2,7 @@
 
 namespace SpaceshipGame2.Utility {
 	interface IUpdateable {
-		void Update(Game target, float elapsed);
+		void Update(SpaceGame target, float elapsed);
 	}
 }
 
