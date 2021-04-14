@@ -13,6 +13,15 @@ namespace SpaceshipGame2.Input {
 			bindings[action].Add(key);
 		}
 
+		public void Unbind(string action, Key key) {
+			if (bindings.ContainsKey(action)) {
+				if (key == Key.Any) 
+					bindings.Remove(action);
+				else if (bindings[action].Contains(key))
+					bindings[action].Remove(key);
+			}
+		}
+
 		public bool ActionPressed(string action) {
 			if (bindings.ContainsKey(action)) {
 				foreach (Key key in bindings[action])
