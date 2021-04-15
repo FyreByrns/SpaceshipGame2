@@ -23,4 +23,4 @@ jobs:
         run: nuget restore SpaceshipGame2.sln
         
       - name: Build
-        run: msbuild SpaceshipGame2.sln
+        run: msbuild SpaceshipGame2.sln /p:Configuration=Release
