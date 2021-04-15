@@ -1,4 +1,4 @@
-nsname: Publish Release
+name: Publish Release
 on: [push]
 jobs:
   build:
