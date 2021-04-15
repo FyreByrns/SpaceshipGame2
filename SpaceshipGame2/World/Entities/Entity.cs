@@ -63,24 +63,7 @@ namespace SpaceshipGame2.World.Entities {
 		public Entity(vf position_w) {
 			this.position_w = position_w;
 
-			graphics = MultiPolygon.FromString(@"
-[	name(hull)
-	comment(vertices)
-		v(-0.5, -0.5) 
-		v(+0.5, -0.5) 
-		v(+0.2, +0.8) 
-		v(-0.2, +0.8)
-	colour(0, 255, 255)
-	scale(20)	]
-[	name(other)
-	comment(vertices)
-		v(-0.1, -0.1) 
-		v(+0.1, -0.1) 
-		v(+0.1, +0.1) 
-		v(-0.1, +0.1)
-	colour(100, 100, 100)
-	scale(30)	]
-");
+			graphics = MultiPolygon.FromString("[name(default)v(-0.5,-0.5)v(0.5,-0.5)v(0.5,0.5)v(-0.5,0.5)colour(255,0,0)scale(10)]");
 		}
 	}
 }

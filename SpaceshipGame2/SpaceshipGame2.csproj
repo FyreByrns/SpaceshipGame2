@@ -215,6 +215,7 @@
     <Compile Include="Utility\IUpdateable.cs" />
     <Compile Include="Utility\JavidRng.cs" />
     <Compile Include="Utility\Vector2i.cs" />
+    <Compile Include="World\Entities\Player.cs" />
     <Compile Include="World\World.cs" />
     <Compile Include="World\Graphics\MultiPolygon.cs" />
     <Compile Include="World\WorldObject.cs" />
