@@ -10,15 +10,16 @@ namespace SpaceshipGame2.UI {
 			foreach (UIElement element in uiElements)
 				element.Update(owner);
 
-			if (owner.inputManager.ActionPressed("up")) if(selected.up != null)selected = selected.up;
-			if (owner.inputManager.ActionPressed("down")) if(selected.down != null)selected = selected.down;
-			if (owner.inputManager.ActionPressed("left")) if(selected.left != null)selected = selected.left;
-			if (owner.inputManager.ActionPressed("right")) if(selected.right != null)selected = selected.right;
+			if (owner.inputManager.ActionDown("up")) if (selected.up != null) selected = selected.up;
+			if (owner.inputManager.ActionDown("down")) if (selected.down != null) selected = selected.down;
+			if (owner.inputManager.ActionDown("left")) if (selected.left != null) selected = selected.left;
+			if (owner.inputManager.ActionDown("right")) if (selected.right != null) selected = selected.right;
 
-			if (owner.inputManager.ActionPressed("confirm")) selected.Press();
+			if (owner.inputManager.ActionDown("confirm")) selected?.Press();
 		}
 
 		public void Draw() {
+			if (selected != null) selected.state = UIElement.UIElementState.Hovered;
 			foreach (UIElement element in uiElements)
 				element.Draw(owner);
 		}

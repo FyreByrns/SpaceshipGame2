@@ -19,7 +19,7 @@ namespace SpaceshipGame2.Scenes {
 				owner.DrawText(new Point(10, 10), "Press a new key.", Pixel.Presets.White);
 
 				for (Key key = Key.A; key < Key.Any; key++) {
-					if (owner.GetKey(key).Down) {
+					if (owner.GetKey(key).Pressed) {
 						owner.inputManager.Bind(rebindingAction, key);
 
 						rebinding = false;
@@ -36,16 +36,21 @@ namespace SpaceshipGame2.Scenes {
 			TextButton backButton = new TextButton((10, 10), "back");
 			backButton.OnMouseClicked += BackClicked;
 			uiManager.uiElements.Add(backButton);
+			uiManager.selected = backButton;
 
 			TextButton saveButton = new TextButton(backButton.topRight + (1, 0), "save");
 			saveButton.OnMouseClicked += SaveClicked;
 			uiManager.uiElements.Add(saveButton);
+			saveButton.left = backButton;
+			backButton.right = saveButton;
 
 			TextButton lastButton = backButton;
 			foreach (string action in owner.inputManager.bindings.Keys) {
 				TextButton actionButton = new RebindButton(lastButton.bottomLeft + (0, 1), (180, 10), action);
 				actionButton.OnMouseClicked += RebindClicked;
 				uiManager.uiElements.Add(actionButton);
+				lastButton.down = actionButton;
+				actionButton.up = lastButton;
 				lastButton = actionButton;
 			}
 

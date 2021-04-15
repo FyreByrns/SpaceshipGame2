@@ -26,6 +26,17 @@ namespace SpaceshipGame2.Input {
 		}
 
 		/// <summary>
+		/// Check if an action has been pressed this frame but not before
+		/// </summary>
+		public bool ActionDown(string action) {
+			if (bindings.ContainsKey(action)) {
+				if (owner.GetKey(bindings[action]).Pressed)
+					return true;
+			}
+			return false;
+		}
+
+		/// <summary>
 		/// Save input settings to disk
 		/// </summary>
 		public void Save() {

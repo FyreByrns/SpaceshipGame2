@@ -27,6 +27,12 @@ namespace SpaceshipGame2.Scenes {
 			TextButton quitButton = new TextButton(settingsButton.bottomLeft + (0, 1), "quit");
 			quitButton.OnMouseClicked += QuitClicked;
 			uiManager.uiElements.Add(quitButton);
+
+			uiManager.selected = playButton;
+			playButton.down = settingsButton;
+			settingsButton.down = quitButton;
+			settingsButton.up = playButton;
+			quitButton.up = settingsButton;
 		}
 
 		private void PlayClicked(UIElement sender, vf mouse, Mouse button) {
