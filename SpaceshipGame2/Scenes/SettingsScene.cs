@@ -16,7 +16,7 @@ namespace SpaceshipGame2.Scenes {
 			owner.Clear(Pixel.Presets.Black);
 
 			if (rebinding) {
-				owner.DrawText(new Point(10, 10), "Press a new key.", Pixel.Presets.White);
+				owner.DrawText(new Point(10, 10), $"binding {rebindingAction}", Pixel.Presets.White);
 
 				for (Key key = Key.A; key < Key.Any; key++) {
 					if (owner.GetKey(key).Pressed) {

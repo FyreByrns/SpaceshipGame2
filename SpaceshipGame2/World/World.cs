@@ -276,7 +276,7 @@ namespace SpaceshipGame2.World {
 			chunks = new Dictionary<vi, Chunk>();
 			allObjects = new List<WorldObject>();
 
-			player = new Player((0, 0));
+			player = new Player((100000, 0));
 			AddObject(player);
 		}
 	}
