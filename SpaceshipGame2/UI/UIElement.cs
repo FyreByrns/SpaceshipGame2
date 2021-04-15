@@ -86,8 +86,10 @@ namespace SpaceshipGame2.UI {
 						wasPressed[(int)check] = false;
 					}
 				}
-				if (!anyTrue) // if none were pressed and the mouse is over the element, the element is hovered
-					OnMouseHover?.Invoke(this, mouse, Mouse.None);
+				if (!anyTrue) { // if none were pressed and the mouse is over the element, the element is hovered
+					if(state != UIElementState.Hovered) OnMouseHover?.Invoke(this, mouse, Mouse.None);
+					state = UIElementState.Hovered;
+				}
 			}
 		}
 

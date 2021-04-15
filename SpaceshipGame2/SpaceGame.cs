@@ -9,6 +9,13 @@ namespace SpaceshipGame2 {
 
 		public override void OnCreate() {
 			base.OnCreate();
+			Sound.AudioManager.Start();
+			IO.AssetManager.Start();
+		}
+
+		public override void OnDestroy() {
+			base.OnDestroy();
+			Sound.AudioManager.Stop();
 		}
 
 		public override void OnUpdate(float elapsed) {
