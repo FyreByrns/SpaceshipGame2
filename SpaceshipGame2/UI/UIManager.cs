@@ -7,8 +7,11 @@ namespace SpaceshipGame2.UI {
 		public UIElement selected;
 
 		public void Update() {
-			foreach (UIElement element in uiElements)
+			foreach (UIElement element in uiElements) {
 				element.Update(owner);
+				if (element.state == UIElement.UIElementState.Hovered)
+					selected = element;
+			}
 
 			if (owner.inputManager.ActionDown("up")) if (selected.up != null) selected = selected.up;
 			if (owner.inputManager.ActionDown("down")) if (selected.down != null) selected = selected.down;
