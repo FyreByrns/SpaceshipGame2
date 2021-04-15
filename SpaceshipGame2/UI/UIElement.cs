@@ -27,6 +27,10 @@ namespace SpaceshipGame2.UI {
 		bool[] wasPressed;
 		#endregion mouse state
 
+		#region keyboard navigation
+		public UIElement up, down, left, right;
+		#endregion keyboard navigation
+
 		public AABB bounds;
 		public UIElementState state;
 
@@ -37,6 +41,11 @@ namespace SpaceshipGame2.UI {
 
 		public UIColourCollection upColours, downColours, hoverColours, disabledColours;
 		public UIColourCollection currentColours;
+
+		public void Press() {
+			state = UIElementState.Down;
+			OnMouseClicked?.Invoke(this, topLeft, Mouse.Any);
+		}
 
 		public virtual void Update(SpaceGame target) {
 			switch (state) {

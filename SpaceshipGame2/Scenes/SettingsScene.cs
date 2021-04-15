@@ -55,12 +55,12 @@ namespace SpaceshipGame2.Scenes {
 
 		UIElement lastSender = null;
 		private void AnyElementHover(UIElement sender, vf mouse, Mouse button) {
-			if (sender != lastSender) {
-				try {
-					Sound.AudioManager.PlaySound(IO.AssetManager.GetSound("ui-pop"));
-				} catch { }
-			}
-			lastSender = sender;
+			//if (sender != lastSender) {
+			//	try {
+			//		Sound.AudioManager.PlaySound(IO.AssetManager.GetSound("ui-pop"));
+			//	} catch { }
+			//}
+			//lastSender = sender;
 		}
 
 		private void SaveClicked(UIElement sender, vf mouse, Mouse button) {
