@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 using SpaceshipGame2.World.Graphics;
-using SpaceshipGame2.Sound;
 
 namespace SpaceshipGame2.IO {
 	static class AssetManager {
