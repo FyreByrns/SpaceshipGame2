@@ -166,7 +166,7 @@ namespace SpaceshipGame2.World {
 		#endregion chunking / world objects
 
 		#region special entities
-		Entity player;
+		public Entity player;
 		#endregion special entities
 
 		float shootTimer;
@@ -177,7 +177,7 @@ namespace SpaceshipGame2.World {
 			if (target.inputManager.ActionPressed("right")) player.ApplyRotationalForce(0.1f);
 
 			shootTimer -= elapsed;
-			if (target.inputManager.ActionDown("shoot") && shootTimer <= 0) {
+			if (target.inputManager.ActionDown("fire") && shootTimer <= 0) {
 				Entity bullet = new Bullet(vf.Along(player.position_w, 20, -player.rotation + (float)System.Math.PI / 2));
 				AddObject(bullet);
 				bullet.rotation = player.rotation;
