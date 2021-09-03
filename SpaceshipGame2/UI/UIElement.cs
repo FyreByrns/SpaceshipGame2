@@ -39,6 +39,8 @@ namespace SpaceshipGame2.UI {
 		public vf topRight => (bounds.bottomRight.x, bounds.topLeft.y);
 		public vf bottomRight => bounds.bottomRight;
 
+		public vf size => bottomRight - topLeft;
+
 		public UIColourCollection upColours, downColours, hoverColours, disabledColours;
 		public UIColourCollection currentColours;
 

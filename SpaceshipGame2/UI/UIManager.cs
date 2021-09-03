@@ -13,12 +13,14 @@ namespace SpaceshipGame2.UI {
 					selected = element;
 			}
 
-			if (owner.inputManager.ActionDown("up")) if (selected.up != null) selected = selected.up;
-			if (owner.inputManager.ActionDown("down")) if (selected.down != null) selected = selected.down;
-			if (owner.inputManager.ActionDown("left")) if (selected.left != null) selected = selected.left;
-			if (owner.inputManager.ActionDown("right")) if (selected.right != null) selected = selected.right;
+			if (selected != null) {
+				if (owner.inputManager.ActionDown("up"))	if (selected.up != null)	selected = selected.up;
+				if (owner.inputManager.ActionDown("down"))	if (selected.down != null)	selected = selected.down;
+				if (owner.inputManager.ActionDown("left"))	if (selected.left != null)	selected = selected.left;
+				if (owner.inputManager.ActionDown("right")) if (selected.right != null) selected = selected.right;
 
-			if (owner.inputManager.ActionDown("confirm")) selected?.Press();
+				if (owner.inputManager.ActionDown("confirm")) selected?.Press();
+			}
 		}
 
 		public void Draw() {

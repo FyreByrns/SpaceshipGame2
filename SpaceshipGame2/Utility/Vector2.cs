@@ -85,6 +85,10 @@
 			this.y = y ?? default;
 		}
 
+		public override string ToString() {
+			return $"({x}, {y})";
+		}
+
 		public override int GetHashCode() =>
 				x.GetHashCode() * 13 + y.GetHashCode() * 13;
 

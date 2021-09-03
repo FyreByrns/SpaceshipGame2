@@ -8,6 +8,20 @@ namespace SpaceshipGame2.Utility {
 			return (float)result;
 		}
 
+		public static float Constrain (this float value, float min, float max) {
+			if(value < min) {
+				return min;
+			}
+			if(value > max) {
+				return max;
+			}
+			return value;
+		}
+
+		public static float Map(this float value, float oldMin, float oldMax, float newMin, float newMax) {
+			return (value - oldMin) / (oldMax - oldMin) * (newMax - newMin) + newMin;
+		}
+
 		public static float TowardsButNotPass(this float value, float target, float by) {
 			float temp = value;
 			if (value > target) temp -= by;

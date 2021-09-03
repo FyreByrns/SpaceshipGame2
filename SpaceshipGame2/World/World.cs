@@ -129,7 +129,7 @@ namespace SpaceshipGame2.World {
 		/// <summary>
 		/// Get all world objects in a collection of chunks
 		/// </summary>
-		IEnumerable<WorldObject> GetObjects(IEnumerable<Chunk> chunks) {
+		public IEnumerable<WorldObject> GetObjects(IEnumerable<Chunk> chunks) {
 			foreach (Chunk chunk in chunks)
 				foreach (WorldObject o in chunk.worldObjects)
 					yield return o;
@@ -138,7 +138,7 @@ namespace SpaceshipGame2.World {
 		/// <summary>
 		/// Get all chunks the camera can see
 		/// </summary>
-		IEnumerable<Chunk> GetVisibleChunks() {
+		public IEnumerable<Chunk> GetVisibleChunks() {
 			vf cameraTopLeft_w = cameraPosition_w;
 			vf cameraBottomRight_w = cameraTopLeft_w + (WorldLength(cameraSize_s.x), WorldLength(cameraSize_s.y));
 			AABB cameraRegion_w = new AABB(cameraTopLeft_w, cameraBottomRight_w);
@@ -152,7 +152,7 @@ namespace SpaceshipGame2.World {
 		/// <param name="region_w">region in world space</param>
 		/// <param name="border">extra chunks around the resultant chunks to also return</param>
 		/// <returns></returns>
-		IEnumerable<Chunk> GetChunksInRegion(AABB region_w, int border = 1) {
+		public IEnumerable<Chunk> GetChunksInRegion(AABB region_w, int border = 1) {
 			vi topLeft_c = Chunk.ChunkFromWorldPosition_c(region_w.topLeft);
 			vi bottomRight_c = Chunk.ChunkFromWorldPosition_c(region_w.bottomRight);
 
@@ -182,7 +182,7 @@ namespace SpaceshipGame2.World {
 				AddObject(bullet);
 				bullet.rotation = player.rotation;
 				bullet.vel = player.vel + vf.Along(default, 1, -player.rotation + (float)System.Math.PI / 2);
-				bullet.graphics = MultiPolygon.FromString("[name(bullet)v(-0.2,-0.5)v(0.2,-0.5)v(0.2,0.5)v(-0.2,0.5)colour(0,255,0)scale(10)]");
+				bullet.graphics = IO.AssetManager.GetShape("bullet", true);
 				shootTimer = 0.1f;
 			}
 
@@ -222,7 +222,6 @@ namespace SpaceshipGame2.World {
 			if (cameraClear) target.Clear(cameraClearColour);
 
 			IEnumerable<WorldObject> currentlyVisibleWorldObjects = GetObjects(GetVisibleChunks());
-			target.DrawText(new Point(10, 20), $"{currentlyVisibleWorldObjects.Contains(player)}", Pixel.Presets.Cyan);
 
 			foreach (WorldObject worldObject in currentlyVisibleWorldObjects) {
 				worldObject.Draw(target, this);
@@ -276,7 +275,7 @@ namespace SpaceshipGame2.World {
 			chunks = new Dictionary<vi, Chunk>();
 			allObjects = new List<WorldObject>();
 
-			player = new Player((100000, 0));
+			player = new Player((0, 0));
 			AddObject(player);
 		}
 	}

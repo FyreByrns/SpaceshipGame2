@@ -1,5 +1,6 @@
 ﻿using PixelEngine;
 using SpaceshipGame2.Utility;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -42,6 +43,10 @@ namespace SpaceshipGame2.World.Graphics {
 
 		public MultiPolygon() {
 			shapes = new Dictionary<string, Polygon>();
+		}
+
+		public MultiPolygon Copy() {
+			return FromString(ToString());
 		}
 
 		struct ProcessingState {
@@ -139,16 +144,28 @@ namespace SpaceshipGame2.World.Graphics {
 
 				if (state.IsComplete()) {
 					polygon.shapes[state.name] = new Polygon(state.vertices.ToArray()) { colourOutline = state.colour, scale = state.scale };
-
-					//foreach (vf v in state.vertices) {
-					//	try {
-					//		System.Console.WriteLine($"{v.x},{v.y}");
-					//	} catch { }
-					//}
 				}
 			}
 
 			return polygon;
+		}
+
+		public override string ToString() {
+			System.Text.StringBuilder builder = new System.Text.StringBuilder();
+			
+			foreach (var kvp in shapes) {
+				builder.Append($"[name({kvp.Key})");
+
+				foreach (vf v in kvp.Value.vertices) {
+					builder.Append($"v({v.x},{v.y})");
+				}
+				builder.Append($"colour({kvp.Value.colourOutline.R},{kvp.Value.colourOutline.G},{kvp.Value.colourOutline.B},{kvp.Value.colourOutline.A})");
+				builder.Append($"scale({kvp.Value.scale})");
+
+				builder.Append(']');
+			}
+
+			return builder.ToString();
 		}
 	}
 }

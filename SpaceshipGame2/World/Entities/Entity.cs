@@ -63,7 +63,7 @@ namespace SpaceshipGame2.World.Entities {
 		public Entity(vf position_w) {
 			this.position_w = position_w;
 
-			graphics = MultiPolygon.FromString("[name(default)v(-0.5,-0.5)v(0.5,-0.5)v(0.5,0.5)v(-0.5,0.5)colour(255,0,0)scale(10)]");
+			graphics = IO.AssetManager.GetShape("default");
 		}
 	}
 }

@@ -15,9 +15,9 @@ namespace SpaceshipGame2.IO {
 		static Dictionary<string, MultiPolygon> shapes = new Dictionary<string, MultiPolygon>();
 		static Dictionary<string, string> sounds = new Dictionary<string, string>();
 
-		public static MultiPolygon GetShape(string name) {
+		public static MultiPolygon GetShape(string name, bool copy = false) {
 			if (shapes.ContainsKey(name))
-				return shapes[name];
+				return shapes[name].Copy();
 			return null;
 		}
 

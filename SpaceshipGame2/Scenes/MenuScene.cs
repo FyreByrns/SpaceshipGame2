@@ -36,7 +36,7 @@ namespace SpaceshipGame2.Scenes {
 		}
 
 		private void PlayClicked(UIElement sender, vf mouse, Mouse button) {
-			Scene playScene = new GameScene(owner);
+			Scene playScene = new ShapeEditorScene(owner);//new GameScene(owner);
 			owner.currentScene = playScene;
 		}
 		
